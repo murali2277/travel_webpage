@@ -90,7 +90,7 @@ Please contact customer to confirm booking.
 
       // Open WhatsApp with pre-filled message
       // Replace 919876543210 with your actual WhatsApp number
-      const whatsappLink = `https://wa.me/6382420198?text=${encodeURIComponent(whatsappMessage)}`;
+      const whatsappLink = `https://wa.me/mobilenumber?text=${encodeURIComponent(whatsappMessage)}`;
       window.open(whatsappLink, '_blank');
       
       setMessage('WhatsApp opened successfully!');

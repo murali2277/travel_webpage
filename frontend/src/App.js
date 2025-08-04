@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+  import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -15,6 +15,22 @@ function App() {
   const [user, setUser] = useState(null);
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
+
+  // Fetch CSRF token on app start
+  useEffect(() => {
+    const fetchCSRFToken = async () => {
+      try {
+        await fetch('http://localhost:8000/api/csrf-token/', {
+          method: 'GET',
+          credentials: 'include',
+        });
+      } catch (error) {
+        console.log('CSRF token fetch error:', error);
+      }
+    };
+
+    fetchCSRFToken();
+  }, []);
 
   const handleLogin = (userData) => {
     setUser(userData);
@@ -50,25 +66,25 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen flex flex-col">
-        <Navbar 
-          user={user} 
+        <Navbar
+          user={user}
           onLogout={handleLogout}
           onShowLogin={handleShowLogin}
           onShowRegister={handleShowRegister}
         />
-        
+
         <main className="flex-grow">
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home user={user} onShowLogin={handleShowLogin} />} />
             <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
+            <Route path="/contact" element={<Contact user={user} onShowLogin={handleShowLogin} />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/booking-confirmation" element={<BookingConfirmation />} />
           </Routes>
         </main>
-        
+
         <Footer />
-        
+
         {/* Authentication Modals */}
         {showLogin && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -80,7 +96,7 @@ function App() {
                 >
                   ✕
                 </button>
-                <Login 
+                <Login
                   onLogin={handleLogin}
                   onSwitchToRegister={handleShowRegister}
                 />
@@ -88,7 +104,7 @@ function App() {
             </div>
           </div>
         )}
-        
+
         {showRegister && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
@@ -99,7 +115,7 @@ function App() {
                 >
                   ✕
                 </button>
-                <Register 
+                <Register
                   onRegister={handleRegister}
                   onSwitchToLogin={handleShowLogin}
                 />

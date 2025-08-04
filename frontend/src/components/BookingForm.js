@@ -3,7 +3,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { searchVehicles } from '../services/api';
 
-const BookingForm = ({ onSearchResults }) => {
+const BookingForm = ({ onSearchResults, user, onShowLogin }) => {
   const [fromLocation, setFromLocation] = useState('');
   const [toLocation, setToLocation] = useState('');
   const [fromDate, setFromDate] = useState(null);
@@ -25,24 +25,31 @@ const BookingForm = ({ onSearchResults }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    
+
+    // Check if user is logged in
+    if (!user) {
+      setError('Please login to search for vehicles and make bookings.');
+      onShowLogin();
+      return;
+    }
+
     if (!fromLocation || !toLocation || !fromDate || !toDate) {
       setError('Please fill in all required fields.');
       return;
     }
-    
+
     if (fromDate >= toDate) {
       setError('To Date must be after From Date.');
       return;
     }
-    
+
     if (passengers && (passengers < 1 || passengers > 20)) {
       setError('Number of passengers must be between 1 and 20.');
       return;
     }
-    
+
     setLoading(true);
-    
+
     try {
       const searchData = {
         from_location: fromLocation,
@@ -65,103 +72,124 @@ const BookingForm = ({ onSearchResults }) => {
   };
 
   return (
-    <form className="card max-w-4xl mx-auto mt-8" onSubmit={handleSubmit}>
+    <div className="card max-w-4xl mx-auto mt-8 relative">
       <h2 className="text-xl font-semibold mb-6 text-primary-700">Book Your Trip</h2>
-      
+
       {error && <div className="mb-4 p-3 bg-red-100 text-red-600 rounded-lg">{error}</div>}
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-        <div>
-          <label className="block mb-1 font-medium">From Location *</label>
-          <input
-            type="text"
-            className="input-field"
-            value={fromLocation}
-            onChange={(e) => setFromLocation(e.target.value)}
-            placeholder="Enter starting location"
-            required
-          />
+
+      {/* Login Overlay - Only show if user is not logged in */}
+      {!user && (
+        <div className="absolute inset-0 bg-white bg-opacity-95 flex items-center justify-center rounded-lg z-10">
+          <div className="text-center p-8">
+            <div className="text-gray-500 mb-4">
+              <svg className="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold mb-4 text-gray-700">Login Required</h3>
+            <p className="text-gray-600 mb-6">Please login to search for vehicles and make bookings.</p>
+            <button
+              onClick={onShowLogin}
+              className="bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors"
+            >
+              Login to Continue
+            </button>
+          </div>
         </div>
-        
-        <div>
-          <label className="block mb-1 font-medium">To Location *</label>
-          <input
-            type="text"
-            className="input-field"
-            value={toLocation}
-            onChange={(e) => setToLocation(e.target.value)}
-            placeholder="Enter destination"
-            required
-          />
+      )}
+
+      <form onSubmit={handleSubmit} className={`${!user ? 'opacity-50 pointer-events-none' : ''}`}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+          <div>
+            <label className="block mb-1 font-medium">From Location *</label>
+            <input
+              type="text"
+              className="input-field"
+              value={fromLocation}
+              onChange={(e) => setFromLocation(e.target.value)}
+              placeholder="Enter starting location"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1 font-medium">To Location *</label>
+            <input
+              type="text"
+              className="input-field"
+              value={toLocation}
+              onChange={(e) => setToLocation(e.target.value)}
+              placeholder="Enter destination"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1 font-medium">From Date *</label>
+            <DatePicker
+              selected={fromDate}
+              onChange={(date) => setFromDate(date)}
+              className="input-field"
+              placeholderText="Select start date"
+              minDate={new Date()}
+              dateFormat="MM/dd/yyyy"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1 font-medium">To Date *</label>
+            <DatePicker
+              selected={toDate}
+              onChange={(date) => setToDate(date)}
+              className="input-field"
+              placeholderText="Select end date"
+              minDate={fromDate || new Date()}
+              dateFormat="MM/dd/yyyy"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1 font-medium">Vehicle Type</label>
+            <select
+              className="input-field"
+              value={vehicleType}
+              onChange={(e) => setVehicleType(e.target.value)}
+            >
+              {vehicleTypes.map((type) => (
+                <option key={type.value} value={type.value}>
+                  {type.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block mb-1 font-medium">Passengers</label>
+            <input
+              type="number"
+              className="input-field"
+              value={passengers}
+              onChange={(e) => setPassengers(e.target.value)}
+              placeholder="Number of passengers"
+              min="1"
+              max="20"
+            />
+          </div>
         </div>
-        
-        <div>
-          <label className="block mb-1 font-medium">From Date *</label>
-          <DatePicker
-            selected={fromDate}
-            onChange={setFromDate}
-            selectsStart
-            startDate={fromDate}
-            endDate={toDate}
-            minDate={new Date()}
-            className="input-field"
-            placeholderText="Select start date"
-            required
-          />
-        </div>
-        
-        <div>
-          <label className="block mb-1 font-medium">To Date *</label>
-          <DatePicker
-            selected={toDate}
-            onChange={setToDate}
-            selectsEnd
-            startDate={fromDate}
-            endDate={toDate}
-            minDate={fromDate || new Date()}
-            className="input-field"
-            placeholderText="Select end date"
-            required
-          />
-        </div>
-        
-        <div>
-          <label className="block mb-1 font-medium">Vehicle Type</label>
-          <select
-            className="input-field"
-            value={vehicleType}
-            onChange={(e) => setVehicleType(e.target.value)}
+
+        <div className="text-center">
+          <button
+            type="submit"
+            disabled={loading || !user}
+            className="btn-primary text-lg px-8 py-3"
           >
-            {vehicleTypes.map(option => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+            {loading ? 'Searching...' : 'Book Vehicle'}
+          </button>
         </div>
-        
-        <div>
-          <label className="block mb-1 font-medium">Number of Passengers</label>
-          <input
-            type="number"
-            className="input-field"
-            value={passengers}
-            onChange={(e) => setPassengers(e.target.value)}
-            placeholder="Enter number of passengers"
-            min="1"
-            max="20"
-          />
-        </div>
-      </div>
-      
-      <button
-        type="submit"
-        className="btn-primary w-full"
-        disabled={loading}
-      >
-        {loading ? 'Searching...' : 'Book Vehicle'}
-      </button>
-    </form>
+      </form>
+    </div>
   );
 };
 

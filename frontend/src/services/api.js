@@ -11,6 +11,52 @@ const api = axios.create({
   withCredentials: true, // Important for session authentication
 });
 
+// Function to get CSRF token
+const getCSRFToken = () => {
+  const name = 'csrftoken';
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+};
+
+// Request interceptor to add CSRF token
+api.interceptors.request.use(
+  (config) => {
+    const csrfToken = getCSRFToken();
+    if (csrfToken) {
+      config.headers['X-CSRFToken'] = csrfToken;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Response interceptor to handle CSRF errors
+api.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (error.response?.status === 403 && error.response?.data?.detail === 'CSRF Failed') {
+      // Try to get a new CSRF token and retry the request
+      console.log('CSRF token expired, retrying request...');
+      return api.request(error.config);
+    }
+    return Promise.reject(error);
+  }
+);
+
 // API endpoints
 export const searchVehicles = async (searchData) => {
   try {

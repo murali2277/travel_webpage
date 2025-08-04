@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import logo from '../assets/images/logo.png';
 
 const Navbar = ({ user, onLogout, onShowLogin, onShowRegister }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -27,7 +28,12 @@ const Navbar = ({ user, onLogout, onShowLogin, onShowRegister }) => {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex-shrink-0 flex items-center">
-              <h1 className="text-2xl font-bold text-primary-600">MSK Travels</h1>
+              <img 
+                src={logo} 
+                alt="MSK Travels" 
+                className="h-12 w-auto"
+                style={{ maxHeight: '48px' }}
+              />
             </Link>
           </div>
 
@@ -46,7 +52,7 @@ const Navbar = ({ user, onLogout, onShowLogin, onShowRegister }) => {
                 {link.label}
               </Link>
             ))}
-            
+
             {/* Auth Buttons */}
             {user ? (
               <div className="relative">
@@ -55,11 +61,11 @@ const Navbar = ({ user, onLogout, onShowLogin, onShowRegister }) => {
                   className="flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50"
                 >
                   <span>👤 {user.first_name || user.username}</span>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
-                
+
                 {isProfileOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
                     <Link
@@ -135,7 +141,7 @@ const Navbar = ({ user, onLogout, onShowLogin, onShowRegister }) => {
                 {link.label}
               </Link>
             ))}
-            
+
             {/* Mobile Auth */}
             {user ? (
               <div className="pt-4 border-t border-gray-200">
@@ -160,7 +166,7 @@ const Navbar = ({ user, onLogout, onShowLogin, onShowRegister }) => {
                 </button>
               </div>
             ) : (
-              <div className="pt-4 border-t border-gray-200 space-y-2">
+              <div className="pt-4 border-t border-gray-200">
                 <button
                   onClick={() => {
                     onShowLogin();
@@ -175,7 +181,7 @@ const Navbar = ({ user, onLogout, onShowLogin, onShowRegister }) => {
                     onShowRegister();
                     setIsMenuOpen(false);
                   }}
-                  className="block w-full text-left px-3 py-2 text-base font-medium text-primary-600 hover:bg-primary-50"
+                  className="block w-full text-left px-3 py-2 text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50"
                 >
                   Sign Up
                 </button>

@@ -3,34 +3,43 @@ import BookingForm from '../components/BookingForm';
 import SearchResults from '../components/SearchResults';
 import PackageCatalog from '../components/PackageCatalog';
 import BookingConfirmation from '../components/BookingConfirmation';
-import { useNavigate } from 'react-router-dom';
 
-const Home = () => {
+const Home = ({ user, onShowLogin }) => {
   const [searchResults, setSearchResults] = useState(null);
   const [searchCriteria, setSearchCriteria] = useState(null);
   const [selectedPackage, setSelectedPackage] = useState(null);
-  const [showPackageCatalog, setShowPackageCatalog] = useState(false);
   const [showBookingConfirmation, setShowBookingConfirmation] = useState(false);
   const [bookingData, setBookingData] = useState(null);
-  const navigate = useNavigate();
 
   const handleSearchResults = (data) => {
+    // Check if user is logged in before allowing search
+    if (!user) {
+      alert('Please login to search for vehicles and make bookings.');
+      onShowLogin();
+      return;
+    }
+
     setSearchResults(data.vehicles);
     setSearchCriteria(data.search_criteria);
-    setShowPackageCatalog(true);
   };
 
   const handleSelectPackage = (pkg) => {
     setSelectedPackage(pkg);
-    setShowPackageCatalog(false);
   };
 
   const handleBookNow = (vehicle) => {
+    // Check if user is logged in before booking
+    if (!user) {
+      alert('Please login to make a booking.');
+      onShowLogin();
+      return;
+    }
+
     // Prepare booking data
     const bookingData = {
-      customerName: 'Guest User', // You can get this from user context
-      customerEmail: 'guest@example.com',
-      customerPhone: '+91 98765 43210',
+      customerName: user.first_name ? `${user.first_name} ${user.last_name}` : user.username,
+      customerEmail: user.email,
+      customerPhone: user.phone || '+91 98765 43210',
       fromLocation: searchCriteria.from_location,
       toLocation: searchCriteria.to_location,
       startDate: searchCriteria.from_date,
@@ -68,53 +77,37 @@ const Home = () => {
           <p className="text-xl md:text-2xl mb-8 opacity-90">
             Choose from our premium vehicles and travel packages
           </p>
-          <div className="flex justify-center space-x-4">
-            <button
-              onClick={() => setShowPackageCatalog(true)}
-              className="bg-white text-primary-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-            >
-              View Packages
-            </button>
-            <button
-              onClick={() => document.getElementById('booking-form').scrollIntoView({ behavior: 'smooth' })}
-              className="border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-primary-600 transition-colors"
-            >
-              Book Now
-            </button>
-          </div>
         </div>
       </div>
 
-      {/* Booking Form */}
-      <div id="booking-form">
-        <BookingForm onSearchResults={handleSearchResults} />
+      {/* Booking Form - At the Top */}
+      <div className="mt-8">
+        <BookingForm onSearchResults={handleSearchResults} user={user} onShowLogin={onShowLogin} />
       </div>
 
-      {/* Package Catalog */}
-      {showPackageCatalog && !selectedPackage && (
-        <div className="mt-8">
-          <PackageCatalog onSelectPackage={handleSelectPackage} />
-        </div>
-      )}
-
-      {/* Search Results */}
-      {searchResults && selectedPackage && (
+      {/* Search Results - If Available */}
+      {searchResults && (
         <div className="mt-8">
           <div className="text-center mb-6">
             <h3 className="text-2xl font-bold text-gray-800 mb-2">
-              Available Vehicles for {selectedPackage.name}
+              Available Vehicles
             </h3>
             <p className="text-gray-600">
-              Package Price: ₹{selectedPackage.price.toLocaleString()} | Max Distance: {selectedPackage.maxDistance}
+              Select a vehicle to proceed with booking
             </p>
           </div>
           <SearchResults vehicles={searchResults} onBookNow={handleBookNow} />
         </div>
       )}
 
+      {/* Package Catalog - Below Booking Form */}
+      <div className="mt-12">
+        <PackageCatalog onSelectPackage={handleSelectPackage} />
+      </div>
+
       {/* Booking Confirmation Modal */}
       {showBookingConfirmation && bookingData && (
-        <BookingConfirmation 
+        <BookingConfirmation
           bookingData={bookingData}
           onClose={handleCloseBookingConfirmation}
         />
