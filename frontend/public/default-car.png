@@ -1,0 +1,11 @@
+This should be a default car image (PNG format) that will be displayed when vehicle images are not available.
+
+You can:
+1. Download a free car icon/image from sites like:
+   - Flaticon.com
+   - Icons8.com
+   - Freepik.com
+2. Save it as "default-car.png" in the frontend/public/ directory
+3. Make sure it's a reasonable size (around 400x300 pixels)
+
+The image will be used as a fallback when vehicle.image_url is null or the image fails to load. 
