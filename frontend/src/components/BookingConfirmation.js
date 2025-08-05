@@ -42,7 +42,7 @@ MSK Travels Team
       `;
 
       // Open email client
-      const mailtoLink = `mailto:info@msktravels.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+      const mailtoLink = `mailto:kumar@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
       window.open(mailtoLink);
       
       setMessage('Email client opened successfully!');
@@ -90,7 +90,7 @@ Please contact customer to confirm booking.
 
       // Open WhatsApp with pre-filled message
       // Replace 919876543210 with your actual WhatsApp number
-      const whatsappLink = `https://wa.me/mobilenumber?text=${encodeURIComponent(whatsappMessage)}`;
+      const whatsappLink = `https://wa.me/638242000?text=${encodeURIComponent(whatsappMessage)}`;
       window.open(whatsappLink, '_blank');
       
       setMessage('WhatsApp opened successfully!');

@@ -45,4 +45,25 @@ class BookingCreateSerializer(serializers.ModelSerializer):
         if conflicting_bookings.exists():
             raise serializers.ValidationError("Vehicle is not available for the selected dates")
         
+        return data
+
+class DirectBookingSerializer(serializers.Serializer):
+    customer_name = serializers.CharField(max_length=100)
+    customer_email = serializers.EmailField()
+    customer_phone = serializers.CharField(max_length=20)
+    from_location = serializers.CharField(max_length=100)
+    to_location = serializers.CharField(max_length=100)
+    start_date = serializers.DateField()
+    end_date = serializers.DateField()
+    vehicle_type = serializers.CharField(max_length=50, required=False, allow_blank=True)
+    passengers = serializers.IntegerField(min_value=1, max_value=20, required=False)
+    additional_notes = serializers.CharField(max_length=500, required=False, allow_blank=True)
+    
+    def validate(self, data):
+        start_date = data['start_date']
+        end_date = data['end_date']
+        
+        if start_date >= end_date:
+            raise serializers.ValidationError("End date must be after start date")
+        
         return data 

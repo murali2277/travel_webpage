@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { searchVehicles } from '../services/api';
+import { createDirectBooking } from '../services/api';
 
-const BookingForm = ({ onSearchResults, user, onShowLogin }) => {
+const BookingForm = ({ user, onShowLogin }) => {
   const [fromLocation, setFromLocation] = useState('');
   const [toLocation, setToLocation] = useState('');
   const [fromDate, setFromDate] = useState(null);
@@ -28,7 +28,7 @@ const BookingForm = ({ onSearchResults, user, onShowLogin }) => {
 
     // Check if user is logged in
     if (!user) {
-      setError('Please login to search for vehicles and make bookings.');
+      setError('Please login to make bookings.');
       onShowLogin();
       return;
     }
@@ -51,21 +51,34 @@ const BookingForm = ({ onSearchResults, user, onShowLogin }) => {
     setLoading(true);
 
     try {
-      const searchData = {
+      const bookingData = {
+        customer_name: user.first_name ? `${user.first_name} ${user.last_name}` : user.username,
+        customer_email: user.email,
+        customer_phone: user.phone || '+91 98765 43210',
         from_location: fromLocation,
         to_location: toLocation,
-        from_date: fromDate.toISOString().split('T')[0],
-        to_date: toDate.toISOString().split('T')[0],
+        start_date: fromDate.toISOString().split('T')[0],
+        end_date: toDate.toISOString().split('T')[0],
+        vehicle_type: vehicleType || '',
+        passengers: passengers ? parseInt(passengers) : null,
+        additional_notes: ''
       };
 
-      // Add optional filters
-      if (vehicleType) searchData.vehicle_type = vehicleType;
-      if (passengers) searchData.passengers = parseInt(passengers);
-
-      const data = await searchVehicles(searchData);
-      onSearchResults(data);
+      const response = await createDirectBooking(bookingData);
+      
+      // Show success message
+      alert(response.message || 'Booking request submitted successfully! We will contact you soon.');
+      
+      // Reset form
+      setFromLocation('');
+      setToLocation('');
+      setFromDate(null);
+      setToDate(null);
+      setVehicleType('');
+      setPassengers('');
+      
     } catch (err) {
-      setError(err?.detail || 'Failed to fetch vehicles.');
+      setError(err?.detail || 'Failed to submit booking request. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -87,7 +100,7 @@ const BookingForm = ({ onSearchResults, user, onShowLogin }) => {
               </svg>
             </div>
             <h3 className="text-lg font-semibold mb-4 text-gray-700">Login Required</h3>
-            <p className="text-gray-600 mb-6">Please login to search for vehicles and make bookings.</p>
+            <p className="text-gray-600 mb-6">Please login to make booking requests.</p>
             <button
               onClick={onShowLogin}
               className="bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors"
@@ -185,7 +198,7 @@ const BookingForm = ({ onSearchResults, user, onShowLogin }) => {
             disabled={loading || !user}
             className="btn-primary text-lg px-8 py-3"
           >
-            {loading ? 'Searching...' : 'Book Vehicle'}
+            {loading ? 'Submitting...' : 'Book Vehicle'}
           </button>
         </div>
       </form>

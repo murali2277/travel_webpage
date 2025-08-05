@@ -23,8 +23,8 @@ class Booking(models.Model):
     end_date = models.DateField()
 
     # Vehicle and Pricing
-    vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE, related_name='bookings')
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE, related_name='bookings', null=True, blank=True)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
     # Booking Status
     status = models.CharField(max_length=20, choices=BOOKING_STATUS, default='pending')
@@ -37,8 +37,8 @@ class Booking(models.Model):
         return f"Booking {self.id} - {self.customer_name} ({self.start_date} to {self.end_date})"
 
     def save(self, *args, **kwargs):
-        # Calculate total price if not set
-        if not self.total_price:
+        # Calculate total price if not set and vehicle exists
+        if not self.total_price and self.vehicle:
             days = (self.end_date - self.start_date).days
             self.total_price = self.vehicle.price_per_day * days
         super().save(*args, **kwargs)

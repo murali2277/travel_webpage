@@ -5,14 +5,15 @@ A complete travel booking platform built with React frontend and Django backend.
 ## 🚀 Features
 
 ### Frontend (React)
-- **Landing Page**: Booking form with location and date inputs
-- **Search Results**: Display available vehicles with images and pricing
-- **Booking Confirmation**: Complete booking flow
+- **Landing Page**: Direct booking form with location and date inputs
+- **Package Catalog**: Display available travel packages
+- **Booking System**: Direct booking with email/WhatsApp notifications
 - **About & Contact Pages**: Company information and contact form
 - **Responsive Design**: Built with Tailwind CSS
 
 ### Backend (Django REST Framework)
-- **RESTful API**: Search, booking, and contact endpoints
+- **RESTful API**: Direct booking, contact, and notification endpoints
+- **Email & WhatsApp Integration**: Automatic notifications for bookings and contact messages
 - **Admin Interface**: Manage vehicles, bookings, and messages
 - **CORS Support**: Cross-origin requests for React frontend
 - **Database Models**: Vehicles, Bookings, Contact Messages
@@ -100,9 +101,9 @@ travels_webpage/
 
 ## 🌐 API Endpoints
 
-- `POST /api/search/` - Search for available vehicles
-- `POST /api/book/` - Create a new booking
-- `POST /api/contact/` - Submit contact form
+- `POST /api/direct-book/` - Create a direct booking with email/WhatsApp notifications
+- `POST /api/book/` - Create a new booking (legacy)
+- `POST /api/contact/` - Submit contact form with email/WhatsApp notifications
 
 ## 🎨 Technologies Used
 
@@ -114,7 +115,12 @@ travels_webpage/
 
 1. Open http://localhost:3000 for the React frontend
 2. Open http://localhost:8000/admin for Django admin interface
-3. Use the booking form to search for vehicles and make reservations
+3. Use the booking form to submit booking requests (sends email/WhatsApp notifications)
+4. Contact form also sends email/WhatsApp notifications
+
+## 📧 Email & WhatsApp Setup
+
+See `backend/EMAIL_SETUP.md` for detailed instructions on configuring email and WhatsApp notifications.
 
 ## 🔧 Development
 

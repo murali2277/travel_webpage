@@ -76,6 +76,15 @@ export const createBooking = async (bookingData) => {
   }
 };
 
+export const createDirectBooking = async (bookingData) => {
+  try {
+    const response = await api.post('/direct-book/', bookingData);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+
 export const submitContact = async (contactData) => {
   try {
     const response = await api.post('/contact/', contactData);
