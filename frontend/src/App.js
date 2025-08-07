@@ -73,7 +73,7 @@ function App() {
           onShowRegister={handleShowRegister}
         />
 
-        <main className="flex-grow">
+        <main className="flex-grow pt-16">
           <Routes>
             <Route path="/" element={<Home user={user} onShowLogin={handleShowLogin} />} />
             <Route path="/about" element={<About />} />
@@ -128,4 +128,4 @@ function App() {
   );
 }
 
-export default App; 
+export default App;

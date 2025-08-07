@@ -61,10 +61,10 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-4">Contact Info</h4>
             <div className="space-y-2 text-gray-300">
-              <p>📍 123 Travel Street, City</p>
-              <p>📞 +1 (555) 123-4567</p>
-              <p>✉️ info@msktravels.com</p>
-              <p>🕒 Mon-Fri: 9AM-6PM</p>
+              <p>📍 Dindigul,TamilNadu</p>
+              <p>📞 +91 6382420000</p>
+              <p>✉️ maktravels@gmail.com</p>
+              <p>🕒 Anytime</p>
             </div>
           </div>
         </div>

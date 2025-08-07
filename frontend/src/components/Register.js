@@ -157,7 +157,7 @@ const Register = ({ onRegister, onSwitchToLogin }) => {
           Already have an account?{' '}
           <button
             onClick={onSwitchToLogin}
-            className="text-primary-600 hover:text-primary-700 font-medium"
+            className="text-primary-600 font-medium"
           >
             Login here
           </button>

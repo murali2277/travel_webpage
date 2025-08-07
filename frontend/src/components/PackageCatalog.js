@@ -1,4 +1,7 @@
 import React from 'react';
+import pack1 from '../assets/pack1.jpeg';
+import pack2 from '../assets/images/pack2.jpg';
+import pack3 from '../assets/images/pack3.jpeg';
 
 const PackageCatalog = ({ onSelectPackage }) => {
   const packages = [
@@ -16,7 +19,8 @@ const PackageCatalog = ({ onSelectPackage }) => {
       ],
       duration: '1 Day',
       maxDistance: '200 km',
-      gradient: 'from-blue-500 to-cyan-500'
+      gradient: 'from-blue-500 to-cyan-500',
+      image: pack1
     },
     {
       id: '3days',
@@ -33,7 +37,8 @@ const PackageCatalog = ({ onSelectPackage }) => {
       ],
       duration: '3 Days',
       maxDistance: '600 km',
-      gradient: 'from-green-500 to-emerald-500'
+      gradient: 'from-green-500 to-emerald-500',
+      image: pack2
     },
     {
       id: '5days',
@@ -51,7 +56,8 @@ const PackageCatalog = ({ onSelectPackage }) => {
       ],
       duration: '5 Days',
       maxDistance: '1000 km',
-      gradient: 'from-purple-500 to-pink-500'
+      gradient: 'from-purple-500 to-pink-500',
+      image: pack3
     }
   ];
 
@@ -62,14 +68,14 @@ const PackageCatalog = ({ onSelectPackage }) => {
         <p className="text-gray-600 text-lg">Select the perfect package for your journey</p>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
         {packages.map((pkg) => (
-          <div key={pkg.id} className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100">
+          <div key={pkg.id} className="bg-white rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col">
             {/* Package Image */}
             <div className={`relative h-48 bg-gradient-to-br ${pkg.gradient}`}>
+              <img src={pkg.image} alt={pkg.name} className="w-full h-full object-cover" />
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-white text-center">
-                  <div className="text-4xl mb-2">🚗</div>
                   <div className="text-lg font-semibold">{pkg.name}</div>
                 </div>
               </div>
@@ -81,8 +87,8 @@ const PackageCatalog = ({ onSelectPackage }) => {
             </div>
             
             {/* Package Details */}
-            <div className="p-6">
-              <div className="mb-4">
+            <div className="p-6 flex flex-col flex-grow space-y-4 justify-between">
+              <div>
                 <h3 className="text-xl font-bold text-gray-800 mb-2">{pkg.name}</h3>
                 <div className="text-3xl font-bold text-primary-600 mb-2">
                   ₹{pkg.price.toLocaleString()}
@@ -91,31 +97,33 @@ const PackageCatalog = ({ onSelectPackage }) => {
                 <p className="text-gray-600 text-sm">{pkg.description}</p>
               </div>
               
-              {/* Features */}
-              <div className="mb-6">
-                <h4 className="font-semibold text-gray-800 mb-3">Package Includes:</h4>
-                <ul className="space-y-2">
-                  {pkg.features.map((feature, index) => (
-                    <li key={index} className="flex items-center text-sm text-gray-600">
-                      <span className="text-green-500 mr-2">✓</span>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              
-              {/* Distance Info */}
-              <div className="mb-6 p-3 bg-gray-50 rounded-lg">
-                <div className="flex justify-between items-center text-sm">
-                  <span className="text-gray-600">Max Distance:</span>
-                  <span className="font-semibold text-gray-800">{pkg.maxDistance}</span>
+              <div className="flex-grow space-y-4"> {/* New wrapper for features and distance */}
+                {/* Features */}
+                <div>
+                  <h4 className="font-semibold text-gray-800 mb-3">Package Includes:</h4>
+                  <ul className="space-y-2">
+                    {pkg.features.map((feature, index) => (
+                      <li key={index} className="flex items-center text-sm text-gray-600">
+                        <span className="text-green-500 mr-2">✓</span>
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                
+                {/* Distance Info */}
+                <div className="p-3 bg-gray-50 rounded-lg">
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="text-gray-600">Max Distance:</span>
+                    <span className="font-semibold text-gray-800">{pkg.maxDistance}</span>
+                  </div>
                 </div>
               </div>
               
               {/* Select Button */}
               <button
                 onClick={() => onSelectPackage(pkg)}
-                className="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center"
+                className="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center mt-auto"
               >
                 <span className="mr-2">📦</span>
                 Select {pkg.name}
@@ -128,4 +136,4 @@ const PackageCatalog = ({ onSelectPackage }) => {
   );
 };
 
-export default PackageCatalog; 
+export default PackageCatalog;

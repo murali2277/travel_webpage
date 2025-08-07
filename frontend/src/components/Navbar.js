@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import logo from '../assets/images/logo.png';
+import logo from '../assets/images/logo-removebg-preview.png';
 
 const Navbar = ({ user, onLogout, onShowLogin, onShowRegister }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -23,7 +23,7 @@ const Navbar = ({ user, onLogout, onShowLogin, onShowRegister }) => {
   };
 
   return (
-    <nav className="bg-white shadow-lg">
+    <nav className="bg-white shadow-lg fixed top-0 w-full z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
@@ -58,7 +58,7 @@ const Navbar = ({ user, onLogout, onShowLogin, onShowRegister }) => {
               <div className="relative">
                 <button
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
-                  className="flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50"
+                  className="flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50 transition-colors duration-200"
                 >
                   <span>👤 {user.first_name || user.username}</span>
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -70,14 +70,14 @@ const Navbar = ({ user, onLogout, onShowLogin, onShowRegister }) => {
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
                     <Link
                       to="/profile"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200"
                       onClick={() => setIsProfileOpen(false)}
                     >
                       Profile
                     </Link>
                     <button
                       onClick={handleLogout}
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200"
                     >
                       Logout
                     </button>
@@ -88,7 +88,7 @@ const Navbar = ({ user, onLogout, onShowLogin, onShowRegister }) => {
               <div className="flex items-center space-x-4">
                 <button
                   onClick={onShowLogin}
-                  className="text-gray-700 hover:text-primary-600 font-medium"
+                  className="text-gray-700 hover:text-primary-600 font-medium transition-colors duration-200"
                 >
                   Login
                 </button>
@@ -106,7 +106,7 @@ const Navbar = ({ user, onLogout, onShowLogin, onShowRegister }) => {
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-primary-600 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-primary-600 hover:bg-gray-50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
             >
               <span className="sr-only">Open main menu</span>
               {!isMenuOpen ? (
@@ -150,7 +150,7 @@ const Navbar = ({ user, onLogout, onShowLogin, onShowRegister }) => {
                 </div>
                 <Link
                   to="/profile"
-                  className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50"
+                  className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50 transition-colors duration-200"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Profile
@@ -160,7 +160,7 @@ const Navbar = ({ user, onLogout, onShowLogin, onShowRegister }) => {
                     handleLogout();
                     setIsMenuOpen(false);
                   }}
-                  className="block w-full text-left px-3 py-2 text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50"
+                  className="block w-full text-left px-3 py-2 text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50 transition-colors duration-200"
                 >
                   Logout
                 </button>
@@ -172,7 +172,7 @@ const Navbar = ({ user, onLogout, onShowLogin, onShowRegister }) => {
                     onShowLogin();
                     setIsMenuOpen(false);
                   }}
-                  className="block w-full text-left px-3 py-2 text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50"
+                  className="block w-full text-left px-3 py-2 text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50 transition-colors duration-200"
                 >
                   Login
                 </button>
@@ -181,7 +181,7 @@ const Navbar = ({ user, onLogout, onShowLogin, onShowRegister }) => {
                     onShowRegister();
                     setIsMenuOpen(false);
                   }}
-                  className="block w-full text-left px-3 py-2 text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50"
+                  className="block w-full text-left px-3 py-2 text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50 transition-colors duration-200"
                 >
                   Sign Up
                 </button>
@@ -194,4 +194,4 @@ const Navbar = ({ user, onLogout, onShowLogin, onShowRegister }) => {
   );
 };
 
-export default Navbar; 
+export default Navbar;

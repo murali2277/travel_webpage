@@ -77,7 +77,7 @@ const Login = ({ onLogin, onSwitchToRegister }) => {
           Don't have an account?{' '}
           <button
             onClick={onSwitchToRegister}
-            className="text-primary-600 hover:text-primary-700 font-medium"
+            className="text-primary-600 font-medium"
           >
             Sign up here
           </button>

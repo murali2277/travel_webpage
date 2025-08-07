@@ -40,7 +40,7 @@ const Contact = ({ user, onShowLogin }) => {
               </svg>
             </div>
             <h3 className="text-lg font-semibold text-gray-800 mb-2">Address</h3>
-            <p className="text-gray-600">123 Travel Street, City, State 12345</p>
+            <p className="text-gray-600">Dindigul,TamilNadu</p>
           </div>
 
           <div className="text-center">
@@ -50,7 +50,7 @@ const Contact = ({ user, onShowLogin }) => {
               </svg>
             </div>
             <h3 className="text-lg font-semibold text-gray-800 mb-2">Phone</h3>
-            <p className="text-gray-600">+1 (555) 123-4567</p>
+            <p className="text-gray-600">+91 6382420000</p>
           </div>
 
           <div className="text-center">
@@ -60,7 +60,7 @@ const Contact = ({ user, onShowLogin }) => {
               </svg>
             </div>
             <h3 className="text-lg font-semibold text-gray-800 mb-2">Email</h3>
-            <p className="text-gray-600">info@msktravels.com</p>
+            <p className="text-gray-600">msktravels@gmail.com</p>
           </div>
         </div>
       </div>
