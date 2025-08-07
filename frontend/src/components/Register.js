@@ -33,7 +33,19 @@ const Register = ({ onRegister, onSwitchToLogin }) => {
       const data = await registerUser(form);
       onRegister(data);
     } catch (err) {
-      setError(err?.detail || 'Registration failed. Please try again.');
+      if (err.response && err.response.data) {
+        if (err.response.data.username) {
+          setError(`Username: ${err.response.data.username[0]}`);
+        } else if (err.response.data.email) {
+          setError(`Email: ${err.response.data.email[0]}`);
+        } else if (err.response.data.non_field_errors) {
+          setError(err.response.data.non_field_errors[0]);
+        } else {
+          setError('Registration failed. Please try again.');
+        }
+      } else {
+        setError('Registration failed. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -155,4 +167,4 @@ const Register = ({ onRegister, onSwitchToLogin }) => {
   );
 };
 
-export default Register; 
+export default Register;

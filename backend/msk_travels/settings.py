@@ -6,12 +6,14 @@ from decouple import config
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY', default='django-insecure-msk-travels-secret-key-change-in-production')
+SECRET_KEY = config(
+    'SECRET_KEY', default='django-insecure-msk-travels-secret-key-change-in-production'
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', '172.16.8.212']
 
 # Application definition
 INSTALLED_APPS = [
@@ -27,6 +29,7 @@ INSTALLED_APPS = [
     'vehicles',
     'bookings',
     'contact',
+    'django.core.mail',
 ]
 
 # Custom User Model
@@ -121,6 +124,7 @@ REST_FRAMEWORK = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "http://172.16.8.212:3001",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -150,6 +154,7 @@ CORS_ALLOW_HEADERS = [
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "http://172.16.8.212:3001",
 ]
 
 CSRF_COOKIE_SAMESITE = 'Lax'
@@ -165,11 +170,7 @@ EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='0904muralikumar@gmail.com')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='Nothing$000')
 
-# WhatsApp API Configuration (using WhatsApp Business API or similar service)
-WHATSAPP_API_URL = config('WHATSAPP_API_URL', default='https://api.whatsapp.com/send')
-WHATSAPP_PHONE = config('WHATSAPP_PHONE', default='+916382420198')
-
 # Additional CORS settings for development
 if DEBUG:
     CORS_ALLOW_ALL_ORIGINS = True
-    CORS_ALLOW_CREDENTIALS = True 
+    CORS_ALLOW_CREDENTIALS = True

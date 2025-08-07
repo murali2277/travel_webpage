@@ -10,4 +10,4 @@ class ContactMessageSerializer(serializers.ModelSerializer):
 class ContactMessageCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContactMessage
-        fields = ['name', 'email', 'message'] 
+        fields = ['name', 'email', 'subject', 'message']

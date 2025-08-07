@@ -1,101 +1,30 @@
-import React, { useState } from 'react';
+// src/BookingConfirmation.jsx
 
-const BookingConfirmation = ({ bookingData, onClose }) => {
+import React, { useState } from "react";
+
+const API_URL = "http://localhost:8000/api/direct-booking/"; // Change for deployment!
+
+export default function BookingConfirmation({ bookingData, onClose }) {
   const [isSending, setIsSending] = useState(false);
-  const [message, setMessage] = useState('');
+  const [resultMessage, setResultMessage] = useState("");
 
   const sendToEmail = async () => {
     setIsSending(true);
+    setResultMessage("");
     try {
-      // Email template
-      const emailSubject = `New Booking Request - MSK Travels`;
-      const emailBody = `
-New Booking Request Details:
-
-Customer Information:
-- Name: ${bookingData.customerName}
-- Email: ${bookingData.customerEmail}
-- Phone: ${bookingData.customerPhone}
-
-Trip Details:
-- From: ${bookingData.fromLocation}
-- To: ${bookingData.toLocation}
-- Start Date: ${bookingData.startDate}
-- End Date: ${bookingData.endDate}
-- Passengers: ${bookingData.passengers}
-
-Vehicle Information:
-- Vehicle: ${bookingData.vehicleName}
-- Type: ${bookingData.vehicleType}
-- Capacity: ${bookingData.capacity}
-- Price per day: ₹${bookingData.pricePerDay}
-
-Package Details:
-- Package: ${bookingData.packageName}
-- Package Price: ₹${bookingData.packagePrice}
-- Total Estimated Cost: ₹${bookingData.totalCost}
-
-Please contact the customer to confirm this booking.
-
-Best regards,
-MSK Travels Team
-      `;
-
-      // Open email client
-      const mailtoLink = `mailto:kumar@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-      window.open(mailtoLink);
-      
-      setMessage('Email client opened successfully!');
-    } catch (error) {
-      setMessage('Error opening email client');
-    } finally {
-      setIsSending(false);
-    }
-  };
-
-  const sendToWhatsApp = async () => {
-    setIsSending(true);
-    try {
-      // WhatsApp message template
-      const whatsappMessage = `
-🚗 *NEW BOOKING REQUEST - MSK Travels*
-
-*Customer Details:*
-👤 Name: ${bookingData.customerName}
-📧 Email: ${bookingData.customerEmail}
-📞 Phone: ${bookingData.customerPhone}
-
-*Trip Details:*
-📍 From: ${bookingData.fromLocation}
-🎯 To: ${bookingData.toLocation}
-📅 Start: ${bookingData.startDate}
-📅 End: ${bookingData.endDate}
-👥 Passengers: ${bookingData.passengers}
-
-*Vehicle Details:*
-🚙 Vehicle: ${bookingData.vehicleName}
-🏷️ Type: ${bookingData.vehicleType}
-💺 Capacity: ${bookingData.capacity}
-💰 Price/day: ₹${bookingData.pricePerDay}
-
-*Package Details:*
-📦 Package: ${bookingData.packageName}
-💵 Package Price: ₹${bookingData.packagePrice}
-💳 Total Estimated: ₹${bookingData.totalCost}
-
-Please contact customer to confirm booking.
-
-*MSK Travels Team*
-      `;
-
-      // Open WhatsApp with pre-filled message
-      // Replace 919876543210 with your actual WhatsApp number
-      const whatsappLink = `https://wa.me/638242000?text=${encodeURIComponent(whatsappMessage)}`;
-      window.open(whatsappLink, '_blank');
-      
-      setMessage('WhatsApp opened successfully!');
-    } catch (error) {
-      setMessage('Error opening WhatsApp');
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(bookingData),
+      });
+      const result = await response.json();
+      if (response.ok) {
+        setResultMessage("Booking submitted and email sent successfully!");
+      } else {
+        setResultMessage(result.error || "Error sending booking request.");
+      }
+    } catch (err) {
+      setResultMessage("Network error, please try again.");
     } finally {
       setIsSending(false);
     }
@@ -107,7 +36,7 @@ Please contact customer to confirm booking.
         <div className="p-6">
           {/* Header */}
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-primary-700">Booking Confirmation</h2>
+            <h2 className="text-2xl font-bold text-[#d9480f]">Booking Confirmation</h2>
             <button
               onClick={onClose}
               className="text-gray-500 hover:text-gray-700 text-2xl"
@@ -121,8 +50,8 @@ Please contact customer to confirm booking.
             <div className="flex items-center">
               <span className="text-green-600 text-2xl mr-3">✅</span>
               <div>
-                <h3 className="text-green-800 font-semibold">Booking Request Submitted!</h3>
-                <p className="text-green-700 text-sm">Your booking details will be sent to our team.</p>
+                <h3 className="text-green-800 font-semibold">Booking Request Ready!</h3>
+                <p className="text-green-700 text-sm">Your booking details will be emailed to our team.</p>
               </div>
             </div>
           </div>
@@ -156,7 +85,9 @@ Please contact customer to confirm booking.
                 </div>
                 <div>
                   <span className="font-medium text-gray-600">Dates:</span>
-                  <span className="ml-2 text-gray-800">{bookingData.startDate} - {bookingData.endDate}</span>
+                  <span className="ml-2 text-gray-800">
+                    {bookingData.startDate} - {bookingData.endDate}
+                  </span>
                 </div>
               </div>
             </div>
@@ -168,8 +99,12 @@ Please contact customer to confirm booking.
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <div className="font-medium text-gray-600">Vehicle:</div>
-                <div className="text-gray-800">{bookingData.vehicleName} ({bookingData.vehicleType})</div>
-                <div className="text-sm text-gray-500">Capacity: {bookingData.capacity}</div>
+                <div className="text-gray-800">
+                  {bookingData.vehicleName} ({bookingData.vehicleType})
+                </div>
+                <div className="text-sm text-gray-500">
+                  Capacity: {bookingData.capacity}
+                </div>
               </div>
               <div>
                 <div className="font-medium text-gray-600">Package:</div>
@@ -179,8 +114,12 @@ Please contact customer to confirm booking.
             </div>
             <div className="mt-3 pt-3 border-t border-gray-200">
               <div className="flex justify-between items-center">
-                <span className="font-semibold text-gray-800">Total Estimated Cost:</span>
-                <span className="text-2xl font-bold text-primary-600">₹{bookingData.totalCost}</span>
+                <span className="font-semibold text-gray-800">
+                  Total Estimated Cost:
+                </span>
+                <span className="text-2xl font-bold text-[#d9480f]">
+                  ₹{bookingData.totalCost}
+                </span>
               </div>
             </div>
           </div>
@@ -190,26 +129,17 @@ Please contact customer to confirm booking.
             <button
               onClick={sendToEmail}
               disabled={isSending}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center"
+              className="w-full bg-[#d9480f] hover:bg-[#b93707] text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center"
             >
               <span className="mr-2">📧</span>
-              {isSending ? 'Sending...' : 'Send Details to Email'}
-            </button>
-            
-            <button
-              onClick={sendToWhatsApp}
-              disabled={isSending}
-              className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center"
-            >
-              <span className="mr-2">📱</span>
-              {isSending ? 'Sending...' : 'Send Details to WhatsApp'}
+              {isSending ? "Sending..." : "Send Details to Email"}
             </button>
           </div>
 
           {/* Status Message */}
-          {message && (
+          {resultMessage && (
             <div className="mt-4 p-3 bg-blue-100 border border-blue-400 rounded-lg">
-              <p className="text-blue-800 text-sm">{message}</p>
+              <p className="text-blue-800 text-sm">{resultMessage}</p>
             </div>
           )}
 
@@ -222,32 +152,14 @@ Please contact customer to confirm booking.
                 <ul className="list-disc list-inside space-y-1">
                   <li>Our team will review your booking request</li>
                   <li>We'll contact you within 2 hours to confirm</li>
-                  <li>Payment can be made online or cash on pickup</li>
                   <li>Driver details will be shared 1 hour before pickup</li>
                 </ul>
               </div>
             </div>
           </div>
 
-          {/* Configuration Note */}
-          <div className="mt-4 p-3 bg-gray-50 border border-gray-200 rounded-lg">
-            <div className="flex items-start">
-              <span className="text-gray-600 text-sm mr-2">⚙️</span>
-              <div className="text-xs text-gray-600">
-                <p className="font-medium mb-1">Configuration Note:</p>
-                <p>To customize email and WhatsApp settings, edit the BookingConfirmation.js file:</p>
-                <ul className="list-disc list-inside mt-1 space-y-1">
-                  <li>Change email address in mailtoLink</li>
-                  <li>Update WhatsApp number in whatsappLink</li>
-                  <li>Modify message templates as needed</li>
-                </ul>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
   );
-};
-
-export default BookingConfirmation; 
+}

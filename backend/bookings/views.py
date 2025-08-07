@@ -3,10 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.core.mail import send_mail
 from django.conf import settings
-from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-import requests
-import json
 from .models import Booking
 from .serializers import BookingSerializer, BookingCreateSerializer, DirectBookingSerializer
 
@@ -63,9 +60,6 @@ class DirectBookingView(APIView):
                 
                 # Send email notification
                 self.send_booking_email(booking_data)
-                
-                # Send WhatsApp notification
-                self.send_whatsapp_notification(booking_data)
                 
                 return Response({
                     'message': 'Booking request submitted successfully! We will contact you soon.',
@@ -152,39 +146,3 @@ class DirectBookingView(APIView):
             
         except Exception as e:
             print(f"Email sending failed: {str(e)}")
-    
-    def send_whatsapp_notification(self, booking_data):
-        """Send WhatsApp notification"""
-        try:
-            # Create WhatsApp message
-            message = f"""
-🚗 *New Booking Request*
-
-*Customer:* {booking_data['customer_name']}
-*Phone:* {booking_data['customer_phone']}
-*Email:* {booking_data['customer_email']}
-
-*Trip Details:*
-📍 From: {booking_data['from_location']}
-📍 To: {booking_data['to_location']}
-📅 Start: {booking_data['start_date']}
-📅 End: {booking_data['end_date']}
-🚐 Vehicle Type: {booking_data.get('vehicle_type', 'Not specified')}
-👥 Passengers: {booking_data.get('passengers', 'Not specified')}
-
-*Additional Notes:* {booking_data.get('additional_notes', 'None')}
-
-Please contact the customer to confirm availability and pricing.
-            """
-            
-            # For WhatsApp Business API, you would use their API
-            # For now, we'll create a WhatsApp link
-            whatsapp_url = f"https://wa.me/{settings.WHATSAPP_PHONE}?text={requests.utils.quote(message)}"
-            
-            # In a real implementation, you would use WhatsApp Business API
-            # For now, we'll just log the message
-            print(f"WhatsApp message would be sent to {settings.WHATSAPP_PHONE}")
-            print(f"WhatsApp URL: {whatsapp_url}")
-            
-        except Exception as e:
-            print(f"WhatsApp notification failed: {str(e)}") 

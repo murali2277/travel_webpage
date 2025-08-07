@@ -22,7 +22,11 @@ const Login = ({ onLogin, onSwitchToRegister }) => {
       const data = await loginUser(form);
       onLogin(data.user);
     } catch (err) {
-      setError(err?.detail || 'Login failed. Please check your credentials.');
+      if (err.response && err.response.data && err.response.data.non_field_errors) {
+        setError(err.response.data.non_field_errors[0]);
+      } else {
+        setError(err?.detail || 'Login failed. Please check your credentials.');
+      }
     } finally {
       setLoading(false);
     }
@@ -83,4 +87,4 @@ const Login = ({ onLogin, onSwitchToRegister }) => {
   );
 };
 
-export default Login; 
+export default Login;

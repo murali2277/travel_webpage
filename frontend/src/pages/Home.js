@@ -12,14 +12,18 @@ const Home = ({ user, onShowLogin }) => {
   return (
     <div className="pb-12">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-primary-600 to-primary-800 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">
+      <div className="relative bg-cover bg-center h-[500px] flex items-center justify-center text-white" style={{ backgroundImage: "url('https://source.unsplash.com/random/1600x900/?travel,car')" }}>
+        <div className="absolute inset-0 bg-black opacity-50"></div>
+        <div className="relative z-10 text-center px-4">
+          <h1 className="text-4xl md:text-6xl font-bold mb-4 animate-fade-in-down">
             Book Your Perfect Trip
           </h1>
-          <p className="text-xl md:text-2xl mb-8 opacity-90">
+          <p className="text-xl md:text-2xl mb-8 opacity-90 animate-fade-in-up">
             Choose from our premium vehicles and travel packages
           </p>
+          <button className="bg-primary-500 hover:bg-primary-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition duration-300 hover:scale-105 animate-bounce-in">
+            Explore Packages
+          </button>
         </div>
       </div>
 

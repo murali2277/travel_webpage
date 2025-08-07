@@ -149,4 +149,4 @@ export const updateUserProfile = async (profileData) => {
   }
 };
 
-export default api; 
+export default api;
