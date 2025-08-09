@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { createDirectBooking } from '../services/api';
+import { sendBookingConfirmationEmail } from '../services/emailService';
+import ConfirmationModal from './ConfirmationModal';
 
 const BookingForm = ({ user, onShowLogin }) => {
   const [fromLocation, setFromLocation] = useState('');
@@ -12,6 +13,8 @@ const BookingForm = ({ user, onShowLogin }) => {
   const [passengers, setPassengers] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
 
   const vehicleTypes = [
     { value: '', label: 'All Vehicle Types' },
@@ -64,24 +67,33 @@ const BookingForm = ({ user, onShowLogin }) => {
         additional_notes: ''
       };
 
-      const response = await createDirectBooking(bookingData);
+      const response = await sendBookingConfirmationEmail(bookingData);
       
       // Show success message
-      alert(response.message || 'Booking request submitted successfully! We will contact you soon.');
-      
-      // Reset form
-      setFromLocation('');
-      setToLocation('');
-      setFromDate(null);
-      setToDate(null);
-      setVehicleType('');
-      setPassengers('');
+      if (response.success) {
+        setModalMessage(response.message || 'Booking request submitted successfully! We will contact you soon.');
+        setShowModal(true);
+        // Reset form
+        setFromLocation('');
+        setToLocation('');
+        setFromDate(null);
+        setToDate(null);
+        setVehicleType('');
+        setPassengers('');
+      } else {
+        setError(response.message || 'Failed to submit booking request. Please try again.');
+      }
       
     } catch (err) {
       setError(err?.detail || 'Failed to submit booking request. Please try again.');
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setModalMessage('');
   };
 
   return (
@@ -202,8 +214,15 @@ const BookingForm = ({ user, onShowLogin }) => {
           </button>
         </div>
       </form>
+
+      {showModal && (
+        <ConfirmationModal
+          message={modalMessage}
+          onClose={handleCloseModal}
+        />
+      )}
     </div>
   );
 };
 
-export default BookingForm; 
+export default BookingForm;

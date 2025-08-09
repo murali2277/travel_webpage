@@ -179,7 +179,7 @@ EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
 EMAIL_HOST_USER = config(
     'EMAIL_HOST_USER', default='0904muralikumar@gmail.com'
 )
-EMAIL_HOST_PASSWORD = 'mhzc zxxw dstp nyjx'  # Replace with your actual App Password
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 
 # Additional CORS settings for development
 if DEBUG:
