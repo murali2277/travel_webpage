@@ -12,8 +12,8 @@ const Home = ({ user, onShowLogin }) => {
   return (
     <div className="pb-12">
       {/* Hero Section */}
-      <div className="relative bg-cover bg-center h-[500px] flex items-center justify-center text-white" style={{ backgroundImage: "url('https://source.unsplash.com/random/1600x900/?travel,car')" }}>
-        <div className="absolute inset-0 bg-black opacity-50"></div>
+      <div className="relative bg-cover bg-center h-[500px] flex items-center justify-center text-white group" style={{ backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.3)), url('/images.webp')" }}>
+        <div className="absolute inset-0 transition-opacity duration-500 group-hover:opacity-0" style={{ backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.3))" }}></div>
         <div className="relative z-10 text-center px-4">
           <h1 className="text-4xl md:text-6xl font-bold mb-4 animate-fade-in-down">
             Book Your Perfect Trip

@@ -1,0 +1,90 @@
+services:
+  - type: web
+    name: msk-travels-backend
+    env: python
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput"
+    startCommand: "gunicorn msk_travels.wsgi:application --bind 0.0.0.0:$PORT"
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: DB_NAME
+        fromDatabase:
+          name: msk-travels-db
+          property: databaseName
+      - key: DB_USER
+        fromDatabase:
+          name: msk-travels-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: msk-travels-db
+          property: password
+      - key: DB_HOST
+        fromDatabase:
+          name: msk-travels-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: msk-travels-db
+          property: port
+      - key: EMAIL_HOST
+        value: "smtp.gmail.com"
+      - key: EMAIL_PORT
+        value: "587"
+      - key: EMAIL_USE_TLS
+        value: "True"
+      - key: EMAIL_HOST_USER
+        value: "your-email@gmail.com" # Replace with your actual email
+      - key: EMAIL_HOST_PASSWORD
+        value: "your-app-password" # Replace with your actual app password
+      - key: WHATSAPP_NUMBER
+        value: "919876543210" # Replace with your WhatsApp number
+    healthCheckPath: /api/health/
+    disks:
+      - name: media
+        path: /opt/render/project/src/backend/media
+
+  - type: web
+    name: msk-travels-frontend
+    env: static
+    buildCommand: "npm install && npm run build"
+    staticPublishPath: "./build"
+    autoDeploy: true
+    envVars:
+      - key: REACT_APP_API_BASE_URL
+        value: "https://msk-travels-backend.onrender.com/api" # Replace with your backend service URL
+    routes:
+      - type: rewrite
+        source: /static/(.*)
+        destination: /static/$1
+      - type: rewrite
+        source: /manifest.json
+        destination: /manifest.json
+      - type: rewrite
+        source: /logo192.png
+        destination: /logo192.png
+      - type: rewrite
+        source: /logo512.png
+        destination: /logo512.png
+      - type: rewrite
+        source: /default-car.png
+        destination: /default-car.png
+      - type: rewrite
+        source: /
+        destination: /index.html
+      - type: rewrite
+        source: /.*
+        destination: /index.html
+
+  - type: pserv
+    name: msk-travels-db
+    env: postgres
+    plan: free
+    disk:
+      name: postgres-data
+      mountPath: /var/lib/postgresql/data
+      sizeGB: 1
