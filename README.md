@@ -13,7 +13,7 @@ A complete travel booking platform built with React frontend and Django backend.
 
 ### Backend (Django REST Framework)
 - **RESTful API**: Direct booking, contact, and notification endpoints
-- **Email & WhatsApp Integration**: Automatic notifications for bookings and contact messages
+- **Email Integration**: Automatic notifications for bookings and contact messages
 - **Admin Interface**: Manage vehicles, bookings, and messages
 - **CORS Support**: Cross-origin requests for React frontend
 - **Database Models**: Vehicles, Bookings, Contact Messages
@@ -66,7 +66,13 @@ travels_webpage/
    pip install -r requirements.txt
    ```
 
-5. **Run migrations:**
+5. **Configure Database Connection (Supabase/PostgreSQL):**
+   Create a `.env` file in the `backend/` directory and add your Supabase connection string. Replace the placeholder with your actual connection string from your Supabase project dashboard (Project Settings -> Database -> Connection string -> URI).
+   ```
+   DATABASE_URL="postgresql://[YOUR_USER]:[YOUR_PASSWORD]@[YOUR_HOST]:[YOUR_PORT]/[YOUR_DATABASE_NAME]"
+   ```
+
+6. **Run migrations:**
    ```bash
    python manage.py makemigrations
    python manage.py migrate
@@ -101,29 +107,29 @@ travels_webpage/
 
 ## 🌐 API Endpoints
 
-- `POST /api/direct-book/` - Create a direct booking with email/WhatsApp notifications
+- `POST /api/direct-book/` - Create a direct booking with email notifications
 - `POST /api/book/` - Create a new booking (legacy)
-- `POST /api/contact/` - Submit contact form with email/WhatsApp notifications
+- `POST /api/contact/` - Submit contact form with email notifications
 
 ## 🎨 Technologies Used
 
 - **Frontend**: React, Tailwind CSS, React Router, Axios, React DatePicker
 - **Backend**: Django, Django REST Framework, Django CORS Headers
-- **Database**: SQLite (development), PostgreSQL (production ready)
+- **Database**: PostgreSQL (Supabase)
 
 ## 📱 Usage
 
 1. Open http://localhost:3000 for the React frontend
 2. Open http://localhost:8000/admin for Django admin interface
-3. Use the booking form to submit booking requests (sends email/WhatsApp notifications)
-4. Contact form also sends email/WhatsApp notifications
+3. Use the booking form to submit booking requests (sends email notifications)
+4. Contact form also sends email notifications
 
-## 📧 Email & WhatsApp Setup
+## 📧 Email Setup
 
-See `backend/EMAIL_SETUP.md` for detailed instructions on configuring email and WhatsApp notifications.
+See `backend/EMAIL_SETUP.md` for detailed instructions on configuring email notifications.
 
 ## 🔧 Development
 
 - Backend runs on http://localhost:8000
 - Frontend runs on http://localhost:3000
-- CORS is configured to allow frontend-backend communication 
+- CORS is configured to allow frontend-backend communication
