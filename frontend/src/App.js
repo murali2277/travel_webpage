@@ -9,7 +9,7 @@ import Profile from './pages/Profile';
 import BookingConfirmation from './pages/BookingConfirmation';
 import Login from './components/Login';
 import Register from './components/Register';
-import { logoutUser } from './services/api';
+import api, { logoutUser } from './services/api';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -20,10 +20,7 @@ function App() {
   useEffect(() => {
     const fetchCSRFToken = async () => {
       try {
-        await fetch('http://localhost:8000/api/csrf-token/', {
-          method: 'GET',
-          credentials: 'include',
-        });
+        await api.get('/csrf-token/');
       } catch (error) {
         console.log('CSRF token fetch error:', error);
       }
