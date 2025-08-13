@@ -4,9 +4,9 @@ import emailjs from '@emailjs/browser';
 // You need to replace 'YOUR_PUBLIC_KEY' with your actual EmailJS Public Key
 emailjs.init('VcbYcAWCdtw78Bqj4');
 
-const SERVICE_ID = 'service_zcu7dsa'; // Replace with your EmailJS Service ID
-const TEMPLATE_ID_CONTACT = 'template_t9y97se'; // Replace with your EmailJS Contact Template ID
-const TEMPLATE_ID_BOOKING = 'template_vbrpk7s'; // Replace with your EmailJS Booking Template ID
+const SERVICE_ID = process.env.REACT_APP_EMAILJS_SERVICE_ID;
+const TEMPLATE_ID_CONTACT = process.env.REACT_APP_EMAILJS_TEMPLATE_CONTACT;
+const TEMPLATE_ID_BOOKING = process.env.REACT_APP_EMAILJS_TEMPLATE_BOOKING;
 
 export const sendContactEmail = async (templateParams) => {
   try {
