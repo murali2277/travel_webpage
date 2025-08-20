@@ -15,7 +15,7 @@ SECRET_KEY = config(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', '172.16.8.212']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', '172.16.8.212', 'msktravels.onrender.com', 'travel-webpage-t081.onrender.com']
 
 # Application definition
 INSTALLED_APPS = [
@@ -135,6 +135,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "http://172.16.8.212:3001",
+    "https://msktravels.onrender.com",
+    "https://travel-webpage-t081.onrender.com",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -165,6 +167,8 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "http://172.16.8.212:3001",
+    "https://msktravels.onrender.com",
+    "https://travel-webpage-t081.onrender.com",
 ]
 
 CSRF_COOKIE_SAMESITE = 'Lax'

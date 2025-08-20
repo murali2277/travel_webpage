@@ -15,6 +15,8 @@ ALLOWED_HOSTS = [
     'your-ip-address',
     'localhost',
     '127.0.0.1',
+    'msktravels.onrender.com',
+    'travel-webpage-t081.onrender.com',
 ]
 
 MIDDLEWARE = [
@@ -73,12 +75,16 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 CORS_ALLOWED_ORIGINS = [
     "https://your-domain.com",
     "https://www.your-domain.com",
+    "https://msktravels.onrender.com",
+    "https://travel-webpage-t081.onrender.com",
 ]
 
 # CSRF settings for production
 CSRF_TRUSTED_ORIGINS = [
     "https://your-domain.com",
     "https://www.your-domain.com",
+    "https://msktravels.onrender.com",
+    "https://travel-webpage-t081.onrender.com",
 ]
 
 # Logging
